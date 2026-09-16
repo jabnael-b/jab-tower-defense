@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JAB TOWER DEFENSE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ LOADING SCREEN ============ -->
+  <section id="screen-loading" class="screen active" aria-label="Carregando">
+    <div class="loading-wrap">
+      <div class="loading-emblem">
+        <svg viewBox="0 0 120 120" class="emblem-svg" aria-hidden="true">
+          <polygon points="60,6 111,33 111,87 60,114 9,87 9,33" class="emblem-hex"/>
+          <polygon points="60,26 93,44 93,76 60,94 27,76 27,44" class="emblem-hex-inner"/>
+          <text x="60" y="68" text-anchor="middle" class="emblem-letter">J</text>
+        </svg>
+      </div>
+      <h1 class="loading-title">JAB <span>TOWER DEFENSE</span></h1>
+      <p class="loading-subtitle">Defend. Evolve. Conquer.</p>
+
+      <div class="loading-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="loading-progressbar">
+        <div class="loading-bar-fill" id="loading-bar-fill"></div>
+      </div>
+      <div class="loading-meta-row">
+        <span id="loading-message">Preparando defesa...</span>
+        <span id="loading-percent" class="mono">0%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAIN MENU ============ -->
+  <section id="screen-menu" class="screen" aria-label="Menu principal">
+    <div class="menu-bg-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">J</div>
+        <div class="brand-text">
+          <strong>JAB TOWER DEFENSE</strong>
+          <span>JTD // v0.1 PROTOTYPE</span>
+        </div>
+      </div>
+      <div class="currency-pod">
+        <button class="currency-chip" data-nav="shop" aria-label="Moedas — abrir loja">
+          <span class="currency-icon coin" aria-hidden="true">●</span>
+          <span id="hud-coins" class="mono">0</span>
+        </button>
+        <button class="currency-chip" data-nav="shop" aria-label="Gemas — abrir loja">
+          <span class="currency-icon gem" aria-hidden="true">◆</span>
+          <span id="hud-gems" class="mono">0</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="menu-body">
+      <button class="profile-card" data-nav="profile" aria-label="Abrir perfil do jogador">
+        <div class="avatar-frame">
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+          <div class="avatar-level-badge mono" id="menu-avatar-level">1</div>
+        </div>
+        <div class="profile-card-info">
+          <div class="profile-name-row">
+            <span id="menu-player-name" class="profile-name">JOGADOR</span>
+            <span id="menu-rank-tag" class="rank-tag">RECRUTA</span>
+          </div>
+          <div class="profile-xp-row">
+            <div class="xp-track">
+              <div class="xp-fill" id="menu-xp-fill"></div>
+            </div>
+            <span class="mono xp-label" id="menu-xp-label">0 / 100 XP</span>
+          </div>
+        </div>
+        <span class="chevron" aria-hidden="true">›</span>
+      </button>
+
+      <nav class="menu-grid" aria-label="Navegação principal">
+        <button class="menu-tile menu-tile--primary" data-nav="worlds">
+          <span class="menu-tile-icon" aria-hidden="true">▶</span>
+          <span class="menu-tile-label">JOGAR</span>
+        </button>
+        <button class="menu-tile" data-nav="units">
+          <span class="menu-tile-icon" aria-hidden="true">⌘</span>
+          <span class="menu-tile-label">UNIDADES</span>
+        </button>
+        <button class="menu-tile" data-nav="inventory">
+          <span class="menu-tile-icon" aria-hidden="true">▣</span>
+          <span class="menu-tile-label">INVENTÁRIO</span>
+        </button>
+        <button class="menu-tile" data-nav="missions">
+          <span class="menu-tile-icon" aria-hidden="true">◈</span>
+          <span class="menu-tile-label">MISSÕES</span>
+          <span class="menu-tile-badge" id="menu-missions-badge" hidden>0</span>
+        </button>
+        <button class="menu-tile" data-nav="ranking">
+          <span class="menu-tile-icon" aria-hidden="true">▲</span>
+          <span class="menu-tile-label">RANKING</span>
+        </button>
+        <button class="menu-tile" data-nav="shop">
+          <span class="menu-tile-icon" aria-hidden="true">✚</span>
+          <span class="menu-tile-label">LOJA</span>
+        </button>
+        <button class="menu-tile menu-tile--wide" data-nav="settings">
+          <span class="menu-tile-icon" aria-hidden="true">⚙</span>
+          <span class="menu-tile-label">CONFIGURAÇÕES</span>
+        </button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============ PROFILE SCREEN ============ -->
+  <section id="screen-profile" class="screen" aria-label="Perfil do jogador">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>PERFIL</h2>
+    </header>
+    <div class="panel-scroll">
+      <div class="profile-hero panel">
+        <div class="avatar-frame avatar-frame--lg">
+          <div class="avatar-placeholder" aria-hidden="true">?</div>
+        </div>
+        <h3 id="profile-name">JOGADOR</h3>
+        <div class="rank-block">
+          <span class="rank-tag" id="profile-rank-tag">RECRUTA</span>
+          <div class="stars" id="profile-stars" aria-hidden="true"></div>
+        </div>
+        <div class="xp-track xp-track--wide">
+          <div class="xp-fill" id="profile-xp-fill"></div>
+        </div>
+        <span class="mono xp-label" id="profile-xp-label">0 / 100 XP</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><span class="stat-value mono" id="stat-level">1</span><span class="stat-label">Level</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="stat-wins">0</span><span class="stat-label">Vitórias</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="stat-losses">0</span><span class="stat-label">Derrotas</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="stat-stages">0</span><span class="stat-label">Fases concluídas</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="stat-highest-wave">0</span><span class="stat-label">Maior onda</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="stat-playtime">0m</span><span class="stat-label">Tempo jogado</span></div>
+        <div class="stat-card stat-card--wide"><span class="stat-value mono" id="stat-units">0</span><span class="stat-label">Unidades desbloqueadas</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UNITS (ROSTER) SCREEN ============ -->
+  <section id="screen-units" class="screen" aria-label="Unidades">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>UNIDADES</h2>
+    </header>
+    <div class="panel-scroll">
+      <p class="empty-hint">Nenhuma unidade cadastrada ainda. Este espaço está pronto para receber as unidades do JTD.</p>
+      <div class="grid-units" id="units-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ WORLDS / STAGE SELECT ============ -->
+  <section id="screen-worlds" class="screen" aria-label="Mundos">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>MUNDOS</h2>
+    </header>
+    <div class="panel-scroll" id="worlds-scroll"></div>
+  </section>
+
+  <!-- ============ STAGE PREVIEW ============ -->
+  <section id="screen-stage-preview" class="screen" aria-label="Prévia da fase">
+    <header class="subbar">
+      <button class="btn-back" data-nav="worlds" aria-label="Voltar">‹</button>
+      <h2 id="preview-stage-title">FASE 01</h2>
+    </header>
+    <div class="panel-scroll">
+      <div class="preview-banner panel" id="preview-banner">
+        <span class="difficulty-chip" id="preview-difficulty">NORMAL</span>
+        <h3 id="preview-stage-name">???</h3>
+      </div>
+
+      <div class="reward-row">
+        <div class="reward-chip"><span class="mono" id="preview-xp">+0 XP</span></div>
+        <div class="reward-chip"><span class="mono" id="preview-coins">+0 Coins</span></div>
+      </div>
+
+      <div class="record-grid">
+        <div class="stat-card"><span class="stat-value mono" id="preview-best-score">—</span><span class="stat-label">Melhor resultado</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="preview-best-wave">—</span><span class="stat-label">Maior onda</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="preview-best-time">—</span><span class="stat-label">Tempo recorde</span></div>
+      </div>
+
+      <div class="future-slots">
+        <div class="future-slot"><span>Inimigos recomendados</span><em>Em breve</em></div>
+        <div class="future-slot"><span>Modificadores</span><em>Em breve</em></div>
+        <div class="future-slot"><span>Clima</span><em>Em breve</em></div>
+        <div class="future-slot"><span>Regras especiais</span><em>Em breve</em></div>
+        <div class="future-slot"><span>Requisitos</span><em>Nenhum</em></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-ghost" data-nav="worlds">VOLTAR</button>
+        <button class="btn btn-primary" id="btn-goto-lobby">JOGAR</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOBBY / PREPARATION ============ -->
+  <section id="screen-lobby" class="screen" aria-label="Preparação de batalha">
+    <header class="subbar">
+      <button class="btn-back" data-nav="stage-preview" aria-label="Voltar">‹</button>
+      <h2>PREPARAÇÃO DE BATALHA</h2>
+    </header>
+    <div class="panel-scroll">
+      <div class="lobby-info-row">
+        <div class="lobby-info-chip"><span class="lobby-info-label">Mapa</span><span class="mono" id="lobby-map">???</span></div>
+        <div class="lobby-info-chip"><span class="lobby-info-label">Dificuldade</span><span class="mono" id="lobby-difficulty">NORMAL</span></div>
+        <div class="lobby-info-chip"><span class="lobby-info-label">Modo</span><span class="mono">Solo</span></div>
+        <div class="lobby-info-chip"><span class="lobby-info-label">Dinheiro inicial</span><span class="mono" id="lobby-starting-money">500</span></div>
+      </div>
+
+      <h3 class="section-title">Slots de unidades</h3>
+      <div class="unit-slots" id="lobby-slots"></div>
+
+      <button class="btn btn-primary btn-block" id="btn-start-battle">START BATTLE</button>
+    </div>
+  </section>
+
+  <!-- ============ BATTLE SCREEN ============ -->
+  <section id="screen-battle" class="screen" aria-label="Partida">
+    <div class="battle-hud-top">
+      <div class="hud-stat"><span class="hud-stat-icon" aria-hidden="true">♥</span><span class="mono" id="battle-hp">100</span></div>
+      <div class="hud-stat hud-stat--wave"><span>WAVE</span><span class="mono" id="battle-wave">0 / 10</span></div>
+      <div class="hud-stat"><span class="currency-icon coin" aria-hidden="true">●</span><span class="mono" id="battle-money">500</span></div>
+      <div class="hud-stat"><span class="hud-stat-icon" aria-hidden="true">⏱</span><span class="mono" id="battle-time">00:00</span></div>
+      <button class="btn-icon" id="btn-battle-speed" aria-label="Velocidade da partida">1x</button>
+      <button class="btn-icon" id="btn-battle-pause" aria-label="Pausar partida">❚❚</button>
+      <button class="btn-icon" id="btn-battle-exit" aria-label="Sair da partida">✕</button>
+    </div>
+
+    <div class="battle-arena" id="battle-arena">
+      <canvas id="battle-canvas"></canvas>
+    </div>
+
+    <aside class="wave-info-panel" id="wave-info-panel">
+      <h4>Wave <span id="wave-info-number" class="mono">1</span></h4>
+      <p id="wave-info-desc">Pressione START WAVE para começar.</p>
+    </aside>
+
+    <!-- PAINEL DE TORRE (mesmo overlay do protótipo anterior, agora com dados reais) -->
+    <div class="unit-panel-overlay" id="unit-panel-overlay" hidden>
+      <div class="unit-panel">
+        <button class="btn-icon unit-panel-close" id="unit-panel-close" aria-label="Fechar">✕</button>
+        <h4 id="unit-panel-title">TEST TOWER</h4>
+        <p class="mono">Level <span id="unit-panel-level">1</span></p>
+        <div class="unit-panel-stats">
+          <div><span>Damage</span><strong id="unit-panel-damage">???</strong></div>
+          <div><span>Range</span><strong id="unit-panel-range">???</strong></div>
+          <div><span>Attack Speed</span><strong id="unit-panel-atkspeed">???</strong></div>
+          <div><span>Target</span><strong id="unit-panel-target">FIRST</strong></div>
+        </div>
+        <div class="unit-panel-actions">
+          <button class="btn btn-ghost" id="unit-panel-sell">SELL <span id="unit-panel-sell-value" class="mono"></span></button>
+          <button class="btn btn-primary" id="unit-panel-upgrade">UPGRADE <span id="unit-panel-upgrade-cost" class="mono"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div class="pause-overlay" id="pause-overlay" hidden>
+      <div class="pause-box">
+        <h3>GAME PAUSED</h3>
+        <button class="btn btn-primary btn-block" id="btn-pause-resume">RESUME</button>
+        <button class="btn btn-ghost btn-block" id="btn-pause-exit">EXIT</button>
+      </div>
+    </div>
+
+    <!-- CONFIRMAÇÃO DE SAÍDA -->
+    <div class="confirm-overlay" id="exit-confirm-overlay" hidden>
+      <div class="confirm-box">
+        <h3>ABANDON BATTLE?</h3>
+        <p>Your progress in this battle will be lost.</p>
+        <div class="action-row">
+          <button class="btn btn-ghost" id="btn-exit-cancel">CANCEL</button>
+          <button class="btn btn-danger" id="btn-exit-confirm">EXIT</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="battle-bottom-bar">
+      <div class="tower-shop" id="tower-shop"></div>
+      <button class="btn btn-primary" id="btn-start-wave">START WAVE</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULT SCREEN ============ -->
+  <section id="screen-result" class="screen" aria-label="Resultado da partida">
+    <div class="result-wrap">
+      <h1 class="result-title" id="result-title">VICTORY</h1>
+      <p class="result-wave mono" id="result-wave-label">WAVE 20</p>
+
+      <div class="result-xp-block panel">
+        <div class="result-xp-row">
+          <span>XP GANHO</span>
+          <span class="mono result-xp-gain" id="result-xp-gained">+0</span>
+        </div>
+        <div class="xp-track xp-track--wide">
+          <div class="xp-fill" id="result-xp-fill"></div>
+        </div>
+        <div class="result-xp-meta mono">
+          <span id="result-xp-before">0</span>
+          <span>→</span>
+          <span id="result-xp-after">0</span>
+        </div>
+        <div class="rank-block rank-block--center">
+          <span class="rank-tag" id="result-rank-tag">RECRUTA</span>
+        </div>
+      </div>
+
+      <div class="result-stats-grid">
+        <div class="stat-card"><span class="stat-value mono" id="result-coins">+0</span><span class="stat-label">Coins</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="result-enemies">0</span><span class="stat-label">Enemies Defeated</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="result-damage">0</span><span class="stat-label">Damage Dealt</span></div>
+        <div class="stat-card"><span class="stat-value mono" id="result-highest-wave">0</span><span class="stat-label">Highest Wave</span></div>
+        <div class="stat-card stat-card--wide"><span class="stat-value mono" id="result-time">00:00</span><span class="stat-label">Time</span></div>
+      </div>
+
+      <div class="action-col">
+        <button class="btn btn-primary btn-block" id="btn-play-again">PLAY AGAIN</button>
+        <button class="btn btn-ghost btn-block" id="btn-result-worldmap">WORLD MAP</button>
+        <button class="btn btn-ghost btn-block" id="btn-result-menu">MAIN MENU</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RANKING SCREEN ============ -->
+  <section id="screen-ranking" class="screen" aria-label="Ranking">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>RANKING</h2>
+    </header>
+    <div class="tab-row" id="ranking-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="global">GLOBAL</button>
+      <button class="tab-btn" data-tab="level">LEVEL</button>
+      <button class="tab-btn" data-tab="wins">WINS</button>
+      <button class="tab-btn" data-tab="wave">HIGHEST WAVE</button>
+      <button class="tab-btn" data-tab="damage">DAMAGE</button>
+    </div>
+    <div class="panel-scroll" id="ranking-list"></div>
+  </section>
+
+  <!-- ============ INVENTORY SCREEN ============ -->
+  <section id="screen-inventory" class="screen" aria-label="Inventário">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>INVENTÁRIO</h2>
+    </header>
+    <div class="tab-row" id="inventory-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="all">ALL</button>
+      <button class="tab-btn" data-tab="units">UNITS</button>
+      <button class="tab-btn" data-tab="items">ITEMS</button>
+      <button class="tab-btn" data-tab="materials">MATERIALS</button>
+    </div>
+    <div class="panel-scroll">
+      <div class="grid-inventory" id="inventory-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ MISSIONS SCREEN ============ -->
+  <section id="screen-missions" class="screen" aria-label="Missões">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>MISSÕES</h2>
+    </header>
+    <div class="panel-scroll" id="missions-list"></div>
+  </section>
+
+  <!-- ============ SHOP SCREEN ============ -->
+  <section id="screen-shop" class="screen" aria-label="Loja">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>LOJA</h2>
+    </header>
+    <div class="panel-scroll">
+      <p class="empty-hint">A loja ainda não possui itens à venda. Estrutura pronta para receber ofertas futuras.</p>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS SCREEN ============ -->
+  <section id="screen-settings" class="screen" aria-label="Configurações">
+    <header class="subbar">
+      <button class="btn-back" data-nav="menu" aria-label="Voltar">‹</button>
+      <h2>CONFIGURAÇÕES</h2>
+    </header>
+    <div class="panel-scroll">
+      <div class="settings-list" id="settings-list"></div>
+      <button class="btn btn-danger btn-block" id="btn-reset-game">REINICIAR PROGRESSO</button>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/battle/enemy.js"></script>
+<script src="js/battle/tower.js"></script>
+<script src="js/battle/projectile.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
