@@ -238,9 +238,11 @@ JTD_DATA.towerTypes = {
     projectileColor: "#F2A93B",
     defaultTargetMode: "FIRST",
     levels: [
-      { level: 1, damage: 20, range: 150, attackSpeed: 1.0,  upgradeCost: 180 },
-      { level: 2, damage: 35, range: 165, attackSpeed: 1.15, upgradeCost: 260 },
-      { level: 3, damage: 55, range: 180, attackSpeed: 1.3,  upgradeCost: null },
+      { level: 1, damage: 20,  range: 150, attackSpeed: 1.0,  upgradeCost: 180 },
+      { level: 2, damage: 35,  range: 160, attackSpeed: 1.1,  upgradeCost: 260 },
+      { level: 3, damage: 55,  range: 170, attackSpeed: 1.2,  upgradeCost: 380 },
+      { level: 4, damage: 80,  range: 180, attackSpeed: 1.3,  upgradeCost: 520 },
+      { level: 5, damage: 120, range: 190, attackSpeed: 1.4,  upgradeCost: null },
     ],
   },
 };
